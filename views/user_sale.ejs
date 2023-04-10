@@ -1,0 +1,144 @@
+
+
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-center">
+        <div class="pt-2  w-50">
+            <div class="card card-body btn ">
+                <h3 class="mt-1">ขายสินค้า : วันที่ <%= date  %> </h3>
+            </div>
+        </div>
+    </div>
+
+  
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-body">
+                <table id="employee" class="table table-bordered table-hover " >
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>ชื่อสินค้า</th>
+                            <th>ราคา</th>
+                            <th>มีอยู่</th>
+                            <th>ขาย</th>
+                            <th>คงเหลือ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                            <% for(let i of db_item){%>
+                                <tr>
+                                    <td><%= i.id%></td>
+                                    <td><%= i.name%></td>
+                                    <td><%= i.price%></td>
+                                    <td><%= i.amount%></td>
+
+                                    <td>
+                                        <input type="number" name="U<%=i.id%>" class="form-control" onchange="in_change('<%=JSON.stringify(i)%>')" 
+                                        placeholder="กรอกจำนวน และ กดEnter">
+                                    </td>
+                                    
+                                    <td id="R<%=i.id%>"></td>
+                                </tr>
+                            <%} %> 
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+</div>
+
+
+
+
+<div class="container-fluid">
+
+    <form id="stock_add" action="user_sale/add" method="post">
+
+        <% for(let i of db_item){%>
+
+        <!-- for input form -->
+        <input type="text" name="ID<%=i.id%>" value="<%=i.id%>" class="d-none">
+        <input type="text" id="sale<%=i.id%>" name="ID<%=i.id%>" value="0" class="d-none">
+        <input type="text" id="remain<%=i.id%>" name="ID<%=i.id%>" value="0" class="d-none">
+        <input type="text" id="price<%=i.id%>" name="ID<%=i.id%>" value="0" class="d-none">
+        
+        <%} %> 
+
+        <input type="text" id="total_price" name="total_price" value="0" class="d-none">
+
+        <!-- <input type="text"  name="date" value="<%=  %>" class="d-none">
+        <input type="text"  name="material_ID" value="<%=  %>" class="d-none"> -->
+        
+        <div class="card card-body w-25 mb-4">
+
+            <!-- <div class="form-group">
+                <blockquote id="alert" class="quote-danger m-0">
+                    <h3>! กรุณาใส่ข้อมูลให้ครบ</h3>
+                </blockquote>
+            </div> -->
+
+            <button  type="button" class="btn btn-success"  onclick="to_sumit()">
+                ยืนยันการขาย
+            </button>
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
+<script>
+    $("#alert").addClass("d-none")
+
+    $(function () {
+      $('#employee').DataTable({
+    //     scrollY: '500px',
+    //     // scrollCollapse: true,
+        paging: false,
+      });
+    });
+   
+   let cal_sum = 0;
+   function in_change(data){
+        data = JSON.parse(data)
+        let m_now = parseInt(data.amount);
+        let m_add = parseInt($(`input[name=U${data.id}]`).val()) || 0;
+        let m_remain = ( m_now - m_add ) 
+
+        let cal_price = parseInt(data.price) * m_add ;
+        cal_sum +=cal_price
+        $(`input[id=sale${data.id}]`).val(m_add);
+        $(`input[id=remain${data.id}]`).val(m_remain);
+        $(`input[id=price${data.id}]`).val(cal_price);
+
+        $(`input[id=total_price]`).val(cal_sum);
+        
+
+        $(`td[id=R${data.id}]`).text(m_remain);
+        $(`input[name=B${data.id}]`).val(m_remain);
+
+   }
+
+   function to_sumit(){
+        // let vail =document.querySelectorAll("input[type=number]");
+        // let state = true;
+        
+        document.getElementById("stock_add").submit();
+    // <input type="number"
+        // 
+   }
+
+   
+</script>
