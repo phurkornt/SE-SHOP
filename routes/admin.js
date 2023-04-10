@@ -7,7 +7,7 @@ const manage_emp_controller = require('../controllers/admin_controller/manage_em
 const manage_item_controller = require('../controllers/admin_controller/manage_item');
 const manage_stock_controller = require('../controllers/admin_controller/manage_stock');
 const report_controller = require('../controllers/admin_controller/report');
-
+const user_sale_Controller = require('../controllers/user_sale')
 
 router.get('/', admin_controller.getAdmin);
 
@@ -36,5 +36,11 @@ router.post('/manage_stock/:action', manage_stock_controller.set_stock);
 
 // ---------------  report---------------
 router.get('/report', report_controller.report);
+
+
+router.get('/user_sale',user_sale_Controller.user_sale);
+router.post('/user_sale/:action', user_sale_Controller.set_sale);
+
+
 
 module.exports = router;
