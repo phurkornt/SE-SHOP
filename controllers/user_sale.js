@@ -43,7 +43,7 @@ exports.set_sale=async (req, res) => {
             });
             let sale_id = await model_sale.get_sale_id();
             sale_id = sale_id[0].id;
-            
+
             console.log("SALE" , sale_id);
             for (let i in req.body){
                 let data = req.body[`${i}`];
@@ -51,16 +51,18 @@ exports.set_sale=async (req, res) => {
                 
                 if( parseInt(data[1]) > 0 && i.substring(0,2) == "ID" ){
 
-                    // await model_sale.insert_stock({
-                    //     id:parseInt(data[0]),
-                    //     import:parseInt(data[1]),
-                    //     remain:parseInt(data[2]),
-                    //     date:date.datetime
-                    // });
-                    // await model_item.update_item_amount({
-                    //     amount:parseInt(data[2]),
-                    //     id_update:parseInt(data[0])
-                    // });
+                    await model_sale.insert_sale_detail({
+                        sale_id:parseInt(sale_id),
+                        item_id:parseInt(data[0]),
+                        amount:parseInt(data[1]),
+                        total_price:parseInt(data[3])
+                    });
+
+                    await model_item.update_item_amount({
+                        amount:parseInt(data[2]),
+                        id_update:parseInt(data[0])
+                    });
+
                     // console.log("work");
                 }
             }

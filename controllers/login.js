@@ -5,10 +5,10 @@ const data_login = require('../models/login');
 
 exports.getLogin = (req, res) => {
     // TEST
-    // req.session.user_id = 1;
-    // req.session.user = "hello hello";
+    req.session.user_id = 1;
+    req.session.user = "hello hello";
     // req.session.role = 'emp';
-    // req.session.role = 'admin';
+    req.session.role = 'admin';
     // TEST
     if( req.session.user_id ){
         res.redirect(`/${req.session.role}`)
